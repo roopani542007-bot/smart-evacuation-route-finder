@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>SafePath</title>
+<style>
+body{font-family:Arial,sans-serif;background:#f5f7fb;color:#172033;margin:0}
+.container{max-width:900px;margin:40px auto;padding:20px}
+.card{background:white;border-radius:18px;padding:28px;box-shadow:0 8px 30px #00000012}
+.grid{display:grid;grid-template-columns:repeat(8,42px);gap:5px;margin:25px 0}
+.cell{height:42px;border-radius:7px;background:#e2e8f0;display:flex;align-items:center;justify-content:center;font-size:18px}
+.start{background:#dbeafe}.goal{background:#dcfce7}.hazard{background:#fee2e2}.route{background:#fef3c7}
+button{padding:12px 18px;border:0;border-radius:9px;background:#2563eb;color:white;font-weight:bold}
+input{padding:11px;width:70px;border:1px solid #cbd5e1;border-radius:8px}
+.stats{display:flex;gap:12px;flex-wrap:wrap}.stat{background:#f8fafc;padding:15px;border-radius:10px}
+.muted{color:#64748b}
+.legend span{margin-right:15px}
+@media(max-width:700px){.grid{grid-template-columns:repeat(8,30px)}.cell{height:30px;font-size:13px}}
+</style>
+</head>
+<body>
+<div class="container"><div class="card">
+<h1>🚨 SafePath — Smart Evacuation Route Finder</h1>
+<p class="muted">A graph-algorithm demo that finds an evacuation path while avoiding hazardous or blocked locations.</p>
+<div class="legend"><span>🟦 Start</span><span>🟩 Assembly</span><span>🟥 Hazard</span><span>🟨 Route</span></div>
+<div class="grid">
+{% for cell in cells %}
+<div class="cell {{cell.kind}}">
+{% if cell.kind=="start" %}S{% elif cell.kind=="goal" %}A{% elif cell.kind=="hazard" %}⚠{% elif cell.kind=="route" %}•{% endif %}
+</div>
+{% endfor %}
+</div>
+<div class="stats">
+<div class="stat"><b>Status</b><br>{{"Route found" if found else "No route"}}</div>
+<div class="stat"><b>Moves</b><br>{{moves}}</div>
+<div class="stat"><b>Algorithm</b><br>Breadth-First Search</div>
+</div>
+<h3>Simulate a new hazard</h3>
+<form method="post">
+<label>Row <input name="hazard_row" type="number" min="0" max="7" required></label>
+<label>Column <input name="hazard_col" type="number" min="0" max="7" required></label>
+<button type="submit">Recalculate Route</button>
+</form>
+{% if found %}
+<p><b>Route coordinates:</b> {{path}}</p>
+{% else %}<p><b>No safe route is available for this map.</b></p>{% endif %}
+<p class="muted">Educational simulation only; not intended for real emergency navigation.</p>
+</div></div>
+</body>
+</html>
